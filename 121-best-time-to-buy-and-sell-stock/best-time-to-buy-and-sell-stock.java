@@ -7,6 +7,7 @@ class Solution {
         for(int i=0;i<n;i++){
             
             if(min_price > prices[i]) min_price = prices[i];
+           
             if(profit<prices[i]-min_price) profit = prices[i]-min_price; 
         }
        
