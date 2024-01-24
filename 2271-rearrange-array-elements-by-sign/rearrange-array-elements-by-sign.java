@@ -11,14 +11,12 @@ class Solution {
                 neg.add(nums[i]);
             }
         }
-        int a =0;
-        int b=0;
-        for(int i=0;i<nums.length;i++){
-            if(i%2==0) {
-                nums[i] = pos.get(a++);
-            }else{
-                nums[i] = neg.get(b++);
-            }
+        
+        for(int i=0;i<nums.length/2;i++){
+           
+                nums[i*2] = pos.get(i);
+                nums[2*i+1] = neg.get(i);
+           
         }
          return nums;
     }
