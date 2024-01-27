@@ -4,7 +4,7 @@ class Solution {
         int c = matrix[0].length;
 
         for(int i=0;i<r;i++){
-           for(int j = i + 1;j<c;j++){
+           for(int j = i;j<c;j++){
                // swap for transpose 
                int temp = matrix[i][j];
                matrix[i][j] = matrix[j][i];
