@@ -9,6 +9,7 @@ class Solution {
                 currSum += nums[j];
                 if(currSum == k){
                     count++;
+                    
                 }
             }
         }
