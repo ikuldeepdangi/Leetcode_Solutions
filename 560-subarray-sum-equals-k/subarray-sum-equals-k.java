@@ -1,19 +1,17 @@
 class Solution {
     public int subarraySum(int[] nums, int k) {
+        int currSum , count=0;
         int n = nums.length;
-        int count =0;
 
         for(int i=0;i<n;i++){
-            
-                int sum=0;
+            currSum = 0;
             for(int j=i;j<n;j++){
-                   sum += nums[j];
-                   if(sum==k){
-                       count++;
-                   }
-
+                currSum += nums[j];
+                if(currSum == k){
+                    count++;
+                }
             }
         }
-        return count;
+        return count ;
     }
 }
