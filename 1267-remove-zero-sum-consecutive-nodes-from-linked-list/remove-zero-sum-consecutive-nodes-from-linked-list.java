@@ -8,34 +8,27 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
- 
+
 class Solution {
     public ListNode removeZeroSumSublists(ListNode head) {
-        ListNode dummy = new ListNode(0);
-        dummy.next = head;
-        ListNode prev = dummy;
-        ListNode curr = head;
-
-        while (curr != null) {
-            int sum = 0;
-            ListNode temp = curr;
-
-            while (temp != null) {
-                sum += temp.val;
-                if (sum == 0) {
-                    prev.next = temp.next;
-                    curr = temp.next;
-                    break;
-                }
-                temp = temp.next;
+        if(head == null)return head;
+        ListNode prev = null;
+        ListNode cur = head;
+        int  running_sum=0;
+        while(cur!=null)
+        {
+            running_sum += cur.val;
+            if(running_sum==0)
+            {
+                if(prev == null)
+                head = cur.next;
+                else
+                prev.next = cur.next;
+                return removeZeroSumSublists(head);
             }
-
-            if (temp == null) {
-                prev = curr;
-                curr = curr.next;
-            }
+            cur = cur.next;
         }
-
-        return dummy.next;
+        head.next = removeZeroSumSublists(head.next);
+        return head;
     }
 }
