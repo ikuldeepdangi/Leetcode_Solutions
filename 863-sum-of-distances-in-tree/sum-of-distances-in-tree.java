@@ -1,52 +1,48 @@
-import java.util.*;
 
 class Solution {
     public int[] sumOfDistancesInTree(int n, int[][] edges) {
-        // Step 1: Build adjacency list
-        Map<Integer, List<Integer>> adjList = new HashMap<>();
+        // Initialize adjacency list
+        List<Integer>[] adjList = new List[n];
+        for (int i = 0; i < n; i++) {
+            adjList[i] = new ArrayList<>();
+        }
+        
+        // Build adjacency list
         for (int[] edge : edges) {
             int u = edge[0];
             int v = edge[1];
-            adjList.putIfAbsent(u, new ArrayList<>());
-            adjList.putIfAbsent(v, new ArrayList<>());
-            adjList.get(u).add(v);
-            adjList.get(v).add(u);
+            adjList[u].add(v);
+            adjList[v].add(u);
         }
         
-        
         int[] subtreeSize = new int[n];
-        int[] distanceSum = new int[n];
-        
-        // Step 2: DFS to calculate subtree sizes and distances
-        dfs(0, -1, adjList, subtreeSize, distanceSum);
-        
-        // Step 3: DFS to update answer array
         int[] answer = new int[n];
-        dfsUpdate(0, -1, adjList, subtreeSize, distanceSum, answer, 0);
+        
+        // Calculate subtree sizes and answer array in a single DFS pass
+        dfs(0, -1, adjList, subtreeSize, answer);
+        
+        // Calculate answer array using the precomputed subtree sizes
+        dfsUpdate(0, -1, adjList, subtreeSize, answer);
         
         return answer;
     }
     
-    // DFS to calculate subtree sizes and distances
-    private void dfs(int node, int parent, Map<Integer, List<Integer>> adjList, int[] subtreeSize, int[] distanceSum) {
+    private void dfs(int node, int parent, List<Integer>[] adjList, int[] subtreeSize, int[] answer) {
         subtreeSize[node] = 1;
-        for (int neighbor : adjList.getOrDefault(node, new ArrayList<>())) {
+        for (int neighbor : adjList[node]) {
             if (neighbor != parent) {
-                dfs(neighbor, node, adjList, subtreeSize, distanceSum);
+                dfs(neighbor, node, adjList, subtreeSize, answer);
                 subtreeSize[node] += subtreeSize[neighbor];
-                distanceSum[node] += distanceSum[neighbor] + subtreeSize[neighbor];
+                answer[node] += answer[neighbor] + subtreeSize[neighbor];
             }
         }
     }
     
-    // DFS to update answer array
-    private void dfsUpdate(int node, int parent, Map<Integer, List<Integer>> adjList, int[] subtreeSize, int[] distanceSum, int[] answer, int parentAnswer) {
-        answer[node] = distanceSum[node] + parentAnswer;
-        
-        for (int neighbor : adjList.getOrDefault(node, new ArrayList<>())) {
+    private void dfsUpdate(int node, int parent, List<Integer>[] adjList, int[] subtreeSize, int[] answer) {
+        for (int neighbor : adjList[node]) {
             if (neighbor != parent) {
-                int newParentAnswer = answer[node] - distanceSum[neighbor] - subtreeSize[neighbor] + adjList.size() - subtreeSize[neighbor];
-                dfsUpdate(neighbor, node, adjList, subtreeSize, distanceSum, answer, newParentAnswer);
+                answer[neighbor] = answer[node] - subtreeSize[neighbor] + adjList.length - subtreeSize[neighbor];
+                dfsUpdate(neighbor, node, adjList, subtreeSize, answer);
             }
         }
     }
